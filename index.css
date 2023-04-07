@@ -1,0 +1,266 @@
+@import url('https://fonts.googleapis.com/css2?family=Bree+Serif&family=Caveat:wght@400;700&family=Lobster&family=Monoton&family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Playfair+Display+SC:ital,wght@0,400;0,700;1,700&family=Playfair+Display:ital,wght@0,400;0,700;1,700&family=Roboto:ital,wght@0,400;0,700;1,400;1,700&family=Source+Sans+Pro:ital,wght@0,400;0,700;1,700&family=Work+Sans:ital,wght@0,400;0,700;1,700&display=swap');
+
+a{
+    text-decoration: none !important;
+}
+body{
+    padding: 0;
+    margin: 0;
+    overflow-x: hidden;
+}
+
+.navbar{
+    background-color: rgb(207, 221, 233);
+    height: 15vh;
+    width: 100vw;
+    position: sticky;
+    top: 0px;
+    z-index: 9999;
+    
+}
+.navbar-head{
+    font-weight: bold;
+    text-align: center;
+    font-size: 50px;
+    padding: 20px;
+    padding-right: 0px;
+    font-family: Bree Serif;
+
+}
+.card1 {
+    background: #3aeb34;
+    background-size: cover;
+    width:100vw;
+    height: 10vh;
+    padding: 10px;
+    /* flex-direction: row;
+    flex-wrap: wrap; */
+
+
+}
+.card2{
+    padding-right:10px;
+    padding-top: 15px;
+}
+
+.image-style{
+  
+    height: 100px;
+    padding-top: 15px;
+    padding-bottom: 10px;
+    text-decoration: none;
+    cursor: pointer;
+    padding-left: 120px;
+    
+}
+
+
+.main-heading {
+    /* color: white;
+    font-size: 16px;
+    font-family: Roboto;
+    padding: 15px;
+    text-decoration: none !important ;
+    */
+    color: white;
+    cursor: pointer;
+    font-size: 18px;
+    font-family: Roboto;
+    padding-left: 90px;
+    text-decoration: none;
+
+
+}
+.paragraph{
+    font-size: 20px;
+    font-family: Bree-Serif;
+    color: gray;
+    
+}
+.text-card{
+    padding: 60px;
+    margin-left: 30px;
+}
+
+.image1{
+    height: 500px;
+    padding: 60px;
+}
+.bottom-text{
+    padding:40px;
+    /* padding-left: 70px; */
+}
+.li4{
+    font-style: italic;
+    font-size: 30px;
+    padding-left: 0px;
+
+}
+.heading{
+    font-size: 30px;
+    font-weight: bold;
+    margin-left: 30px;
+    padding-left: 40px;
+    font-family: 'Courier New', Courier, monospace;
+}
+.button1{
+
+    width: 130px;
+    border-radius: 10px;
+    background-color: #3880f4;
+    color: white;
+    border-width: 0px;
+    height: 40px;
+    /* padding-left: 10px; */
+    padding-right: 20px;
+
+}
+.nav-button{
+    width:130px;
+    height:40px;
+    border-radius: 10px;
+    color: white;
+    background-color: brown;
+    border-width: 0px;
+    margin-right: 20px;
+}
+
+
+
+.Head{
+    text-align: center;
+}
+.p1{
+    text-align: center;
+}
+
+.card{
+    width: 33.33%;
+    /* width: 500px; */
+    margin: 50px;
+    border-radius: 60px;
+    border-width: 10px;
+}
+.card-image{
+    border-top-right-radius: 50px;
+    border-top-left-radius: 50px;
+}  
+
+.b1{
+    margin: 15px;
+    border-width: 0px;
+    height: 40px;
+    width: 100px;
+    border-radius:10px;
+    background-color: #3aeb34;
+    color: aliceblue;
+}
+
+.h1{
+  text-align: center;
+  padding: 20px;
+  font-family: Bree Serif;
+  
+  color: #f19116;
+}
+.crousel{
+    margin: 80px;
+}
+.info-card{
+    margin: 150px;
+    margin-top: 60px;
+    border-width: 15px;
+    border-color: #434744;
+}
+.member-photo{
+    height: 360px;
+    width: 300px;
+}
+.H1{
+    text-align: center;
+   padding: 15px;
+    color: crimson;
+    font-family: Bree Serif;
+}
+.p2{
+    text-align: center;
+   color: darkblue;
+   padding: 15px;
+    
+    font-family: Bree Serif;
+}
+.main-heading:hover{
+    color : rgb(230, 233, 27);
+}
+.video{
+    height:500px !important;
+    width: 800px !important;
+    /* margin-left: 100px;  */
+
+ }
+
+.nav-button:hover{
+    background-color: rgb(5, 77, 139);
+    border-color: #99a723;
+
+}
+.button1:hover{
+    background-color: #985d10;
+}
+
+.footer{
+    background-color: rgb(22, 239, 22);
+    background-size: cover;
+    height: 50vh;
+    width: 100vw;
+ }
+ .footer2{
+    background-color: rgb(59, 187, 59);
+    background-size: cover;
+    height: 8vh;
+    width: 100vw;
+ }
+ .list{
+    list-style-type: none;
+    color: white;
+ }
+ .quicklink{
+    margin: 50px;
+    margin-top: 80px;
+    
+}
+.ct{
+    margin-left: 30px;
+}
+
+
+ .contact{
+    margin: 50px;
+    margin-top: 80px;
+ }
+ .ll{
+    color: white;
+    padding: 20px;
+    padding-top: 30px;
+    
+ }
+ .list:hover{
+    color: #3880f4;
+    cursor: pointer;
+    
+ }
+ .line2{
+    font-size: 45px;
+    margin-top: 10px;
+    margin-right: 20px !important; 
+    font-family: Bree Serif;
+    padding: 15px;
+    text-align: center;
+
+ }
+
+@media(min-width: 666px){
+    .image1{
+        width: 100% !important;
+    }
+}

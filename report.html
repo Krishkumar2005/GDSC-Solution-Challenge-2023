@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,  initial-scale=1.0">
+    <meta name="author" content="incaseofcrisis.com" />
+    <link rel="stylesheet" href="css/ir.css" />
+    <title>Incident Report</title>
+
+    <script src="//code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script type="text/javascript">
+        var ICORF_delayInSeconds = 6;
+        var tickTockID;
+        var done_sec = 333;
+        var start_when = new Date();
+        var doneWhen = new Date();
+        var canvas;
+        var context;
+        var x;
+        var y;
+        var radius;
+        var endPercent;
+        var curPerc;
+        var counterClockwise;
+        var circ;
+        var quart;
+        var ticksPerSecond = 5;
+
+        function setUpAnimation() {
+            canvas = document.getElementById('myCanvas');
+            context = canvas.getContext('2d');
+            x = canvas.width / 2;
+            y = canvas.height / 2;
+            radius = 35;
+            endPercent = 100;
+            curPerc = 0;
+            counterClockwise = false;
+            circ = Math.PI * 2;
+            quart = Math.PI / 2;
+            context.lineWidth = 10;
+            context.strokeStyle = '#ad2323';
+            context.shadowOffsetX = 0;
+            context.shadowOffsetY = 0;
+            context.shadowBlur = 10;
+            context.shadowColor = '#656565';
+        }
+
+        function waitingTickTock() {
+            var p = document.getElementById("ICORF_remainingSeconds");
+            //done_sec = done_sec - 1;
+            done_tics = done_tics - 1;
+            done_sec = Math.floor(done_tics / ticksPerSecond);
+            var delayInTics = ICORF_delayInSeconds * ticksPerSecond;
+            var amtDone = (delayInTics - done_tics) / delayInTics;
+            p.innerHTML = done_sec.toString();
+            animate(amtDone, done_sec.toString());
+            if (done_tics < 0) {
+                RemoveModal();
+                submitReport();
+                //alert("should submit now");
+            }
+
+        }
+
+        function decideDisplayModal() {
+            if (ICORF_delayInSeconds == 0) {
+                submitReport();
+            } else {
+                DisplayModal();
+                showlocation();
+            }
+        }
+
+        function DisplayModal() {
+            document.getElementById("overlay").style.height = document.height + 'px';
+            document.getElementById("overlay").className = "OverlayEffect";
+            document.getElementById("modalMsg").className = "ShowModal";
+            // now drh stuff
+            var mm = document.getElementById("modalMsg");
+            mm.style.width = (window.innerWidth - 100) + 'px';
+            canvas = document.getElementById('myCanvas');
+            canvas.setAttribute("left", ((window.innerWidth - 100) / 2));
+            scroll(0, 0);
+            start_when = new Date();
+            done_sec = ICORF_delayInSeconds;
+            done_tics = ICORF_delayInSeconds * ticksPerSecond;
+            doneWhen = start_when + (1000 * ICORF_delayInSeconds);
+            waitingTickTock();
+            setUpAnimation();
+            tickTockID = window.setInterval(function() {
+                waitingTickTock();
+            }, 1000 / ticksPerSecond);
+
+        }
+
+        function RemoveModal() {
+            window.clearInterval(tickTockID);
+            document.getElementById("modalMsg").className = "HideModal";
+            document.getElementById("overlay").className = "";
+            return false;
+        }
+
+        function submitReport() {
+            var b = document.getElementById("submitButton");
+            b.disabled = true;
+            var f = document.getElementById("locform");
+            f.submit();
+        }
+
+
+        function animate(current, lbl) {
+            canvas = document.getElementById('myCanvas');
+            context = canvas.getContext('2d');
+            x = canvas.width / 2;
+            y = canvas.height / 2;
+            radius = 35;
+            endPercent = 100;
+            curPerc = 0;
+            counterClockwise = false;
+            circ = Math.PI * 2;
+            quart = Math.PI / 2;
+            context.lineWidth = 10;
+            context.strokeStyle = '#ad2323';
+            context.shadowOffsetX = 0;
+            context.shadowOffsetY = 0;
+            context.shadowBlur = 10;
+            context.shadowColor = '#656565';
+
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            context.beginPath();
+            context.arc(x, y, radius, -(quart), ((circ) * current) - quart, false);
+            context.stroke();
+            context.font = "20px Arial";
+            var m = context.measureText(lbl);
+            var tx = x - (m.width / 2);
+            var ty = y + 5;
+            context.fillText(lbl, tx, ty);
+        }
+
+        function showlocation() {
+            // One-shot position request.
+            navigator.geolocation.getCurrentPosition(callback);
+        }
+
+        function callback(position) {
+            
+            var lat = position.coords.latitude;
+            var lon = position.coords.longitude;
+            var acc = position.coords.accuracy;
+            var alt = position.coords.altitude;
+            
+            document.getElementById('ICORF_Latitude').value = lat;
+            document.getElementById('ICORF_Longitude').value = lon;
+            document.getElementById('ICORF_HorizAccuracy').value = acc;
+            document.getElementById('ICORF_Altitude').value = alt;
+            
+            var timestamp = new Date();
+            document.getElementById('ICORF_DeviceTime').value = timestamp;
+        }
+    </script>
+
+
+</head>
+<style>
+    body { background: url(accident.jpg) ;background-repeat: no-repeat;background-size: contain;height: 100%; font-family: Helvetica, Arial, sans-serif;font-weight: 400; color: #000;}
+#btnCancel { display: block; margin: 0 auto; }
+.HideModal { display: none; }
+#modalMsg { width: 200px; height: 300px; border-radius:20px; border: 1px solid #000; color: Red;}
+.OverlayEffect { background-color: black; filter: alpha(opacity=70); opacity: 0.7; width: 100%; height: 100%; z-index: 400; position: absolute; top: 0; left: 0; }
+.ShowModal { top: 50px; left: 50px; z-index: 1000; position: absolute; background-color: White; display: block; }
+#submitButton, #btnCancel { font-size: 18px; font-weight: bold; background: #0B1E7D; color: #fff; padding: 5px; border-radius: 8px; width: 30%; height: auto; }
+@media (max-width: 640px) {
+    #submitButton, #btnCancel { width: 70%; }
+}
+@media (min-width: 641px) and (max-width: 767px) {
+    #submitButton, #btnCancel { width: 50%; }
+}
+</style>
+
+<body onload="javascript:showlocation();">
+    
+    <form id="locform" action="http://icodev.incaseofcrisis.com/AppBackend/IncidentReport/Default.aspx" method="post" enctype="multipart/form-data">
+        <div>
+            <input type="hidden" id="ICORF_email_address" name="ICORF_email_address" value="" />
+            <input type="hidden" id="ICORF_password" name="ICORF_password" value="" />
+            <input type="hidden" id="ICORF_EventID" name="ICORF_EventID" value="49806" />
+            <input type="hidden" id="ICORF_PubGUID" name="ICORF_PubGUID" value="AF523409-BA31-4CC4-BE3D-8FAAB0355DD1" />
+            <input type="hidden" id="ICORF_EventName" name="ICORF_EventName" value="Big Honkin' IR" />
+            <input type="hidden" id="ICORF_PlanName" name="ICORF_PlanName" value="JB Dev Test Plan 54" />
+            <input type="hidden" id="ICORF_DeviceName" name="ICORF_DeviceName" value="JB MacBook Pro" />
+            <input type="hidden" id="ICORF_DeviceModel" name="ICORF_DeviceModel" value="MacBook Pro" />
+            <input type="hidden" id="ICORF_DeviceOS" name="ICORF_DeviceOS" value="OSX El Capitan" />
+            <input type="hidden" id="ICORF_DeviceVersion" name="ICORF_DeviceVersion" value="10.11.5" />
+            <!-- <input type="hidden" id="ICORF_DeviceTime" name="ICORF_DeviceTime" value="0" /> -->
+            <input type="hidden" id="ICORF_DeviceTZoffset" name="ICORF_DeviceTZoffset" value="0" />
+            <!-- <input type="hidden" id="ICORF_Longitude" name="ICORF_Longitude" value="0" /> -->
+            <!-- <input type="hidden" id="ICORF_Latitude" name="ICORF_Latitude" value="0" /> -->
+            <input type="hidden" id="ICORF_Altitude" name="ICORF_Altitude" value="" />
+            <input type="hidden" id="ICORF_HorizAccuracy" name="ICORF_HorizAccuracy" value="" />
+            <input type="hidden" id="ICORF_VertAccuracy" name="ICORF_VertAccuracy" value="0" />
+            <input type="hidden" id="ICORF_VendorUUID" name="ICORF_VendorUUID" value="ICC-12345" />
+            <input type="hidden" id="ICORF_BundleID" name="ICORF_BundleID" value="com.incaseofcrisis.icodev" />
+            <input type="hidden" id="ICORF_AppVersion" name="ICORF_AppVersion" value="1.0" />
+            <input type="hidden" id="ICORF_HTMLform" name="ICORF_HTMLform" value="Nothing to see here..." />
+
+            <h3>JB Dev Test Plan 54 / Big Honkin' IR</h3>
+            <p>
+                Current position:<br>
+                <b>Current Time</b>: <input type="text" id="ICORF_DeviceTime" name="ICORF_DeviceTime" value="" /><br>
+                <b>Lat</b>: <input type="text" id="ICORF_Latitude" name="ICORF_Latitude" value="" /><br>
+                <b>Long</b>: <input type="text" id="ICORF_Longitude" name="ICORF_Longitude" value="" />
+            </p>
+            <div style="font-size: 90%;">
+                <p>
+                    <strong>Location of incident:</strong><br />
+                    <select name="Location">
+                        <option disabled="disabled" selected="selected" value="">Please Choose One...</option>
+                        <option value="Classroom">Classroom</option>
+                        <option value="Gym">Gym</option>
+                        <option value="Highway">Highway</option>
+                        <option value="Roadside">Roadside</option>
+                        <option value="On Bus">On bus</option>
+                        <option value="Playground">Playground</option>
+                        <option value="Restroom">Restroom</option>
+                        <option value="Bus Stop">Bus Stop</option>
+                        <option value="unknown"> unknown</option>
+                    </select> 
+                </p>
+
+                <p><strong>Name of victim(s)</strong>:
+                    <br />
+                    <input id="txtName" name="txtName" style="width: 50%; font-size: 110%;" type="text" />
+                </p>
+
+                <p><strong>Type of victim:</strong>
+                    <br />
+                    <input name="victimType" type="checkbox" value="pets" />pets
+                    <br />
+                    <input name="victimType" type="checkbox" value="endangered species" />endangered species
+                    <br />
+                    <input name="victimType" type="checkbox" value="tree and plants" />tree and plants</p>
+
+                <p><strong>If physical, did it result in injury?</strong>
+                    <br />
+                    <input name="ResultInInjury" type="radio" value="Yes" />Yes
+                    <input name="ResultInInjury" type="radio" value="No" />No</p>
+
+                <p><strong>If physical, was it reported to hospital ?</strong>
+                    <br />
+                    <input name="ReportedToNurse" type="radio" value="Yes" />Yes
+                    <input name="ReportedToNurse" type="radio" value="No" />No</p>
+
+                <p><strong>If physical, was it reported to police?</strong>
+                    <br />
+                    <input name="ReportedToPolice" type="radio" value="Yes" />Yes
+                    <input name="ReportedToPolice" type="radio" value="No" />No</p>
+
+                <p><strong>Bullying Behaviors:&nbsp;</strong>Please check the type of behavior(s) assoicated with this incident:</p>
+
+                <table border="0" cellpadding="4" cellspacing="4" style="font-size: 100%; border-collapse: collapse;">
+                    <tbody>
+                        <tr>
+                            <!-- <td>
+                                <input name="BullyBehaviors" type="checkbox" value="CyberBullying" />Cyber Bullying</td>
+                            <td> -->
+                                <input name="injury-type" type="checkbox" value="Damaged internally" />Damaged internally</td>
+                            <td>
+                                <input name=" injury-type" type="checkbox" value="Beaten brutelly" />Beaten brutelly</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input name="injury-type" type="checkbox" value="Disability" />Disability</td>
+                            <td>
+                                <input name="injury-type" type="checkbox" value="Excluded" />Excluded</td>
+                            <td>
+                                <input name="injury-type" type="checkbox" value="Hit" />Hit</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input name="injury-type" type="checkbox" value="Damaged physically" />Damaged physically</td>
+                            <td>
+                                <input name="injury-type" type="checkbox" value="Destroy" />Destroy</td>
+                            <td>
+                                <input name="injury-type" type="checkbox" value="Kicked" />Kicked</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input name="injury-type" type="checkbox" value="Punched" />Punched</td>
+                            <td>
+                                <input name="injury-type" type="checkbox" value="Racial" />Racial</td>
+                            <td>
+                                <input name="injury-type" type="checkbox" value="Religious" />Religious</td>
+                        </tr>
+                        <tr>
+                            <!-- <td>
+                                <input name="injury-type" type="checkbox" value="ShovedPushed" />Shoved or Pushed</td>
+                            <td>
+                                <input name="injury-type" type="checkbox" value="StaringLeering" />Staring or Leering</td>
+                            <td>
+                                <input name="injury-type" type="checkbox" value="TauntingRidiculing" />Taunting or Ridiculing</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <input name="injury-type" type="checkbox" value="Threatened" />Threatened</td>
+                            <td>
+                                <input name="injury-type" type="checkbox" value="ToldLiesRumors" />Told Lies or False Rumors</td>
+                            <td></td>
+                        </tr> -->
+                    </tbody>
+                </table>
+
+                <p><strong>Reported by</strong>:
+                    <br />
+                    <input name="Reportedby" style="width: 50%; font-size: 110%;" type="text" />
+                </p>
+
+                <p><strong>Describe the incident</strong>:
+                    <br />
+                    <textarea name="Description" rows="12" style="width: 95%; font-size: 110%;"></textarea>
+                </p>
+
+                <p><strong>Physical Evidence:</strong>
+                    <br />
+                    <input name="PhysicalEvidence" type="checkbox" value="photo" /> photo
+                    <!-- <input name="PhysicalEvidence" type="checkbox" value="" /> Email
+                    <input name="PhysicalEvidence" type="checkbox" value="Graffiti" /> Graffiti -->
+                    <input name="PhysicalEvidence" type="checkbox" value="Video_Audio" /> Video/Audio
+                    <input name="PhysicalEvidence" type="checkbox" value="Any person" /> Any person
+                    <br />
+                    <input name="PhysicalEvidence" type="checkbox" value="Other" /> Other:
+                    <input name="PhysicalEvidenceOtherExplain" style="width: 25%; font-size: 110%;" type="text" />
+                </p>
+
+                <p><strong>Upload a photo of the incident:</strong>
+                    <br />
+                    <input accept="image/*" capture="camera" name="fileUpload" type="file" />
+                </p>
+            </div>
+
+
+
+            <p id="message">
+
+            </p>
+            <!-- Move style of button into stylesheet, once the button is nailed down... -->
+            <p style="text-align: center;">
+                <button id="submitButton" name="submitButton" type="button" onclick="decideDisplayModal(); return false();">
+                    Submit This Report</button>
+            </p>
+        </div>
+        <div id="overlay"></div>
+        <div id="modalMsg" style="width: 200px; height: auto; border-radius:20px; border-color: Black; border-style: solid; color: Red;" class="HideModal">
+            <p style="margin:10px;">
+                This Incident Report will be submitted in
+                <span id="ICORF_remainingSeconds"></span> seconds.
+                <br/>
+                <canvas id="myCanvas" width="100" height="100" style="display: block; margin-left: auto; margin-right: auto;">no canvas support</canvas>
+                <br/> To stop this from happening, please press
+                <br />
+                <button type="button" onclick="return RemoveModal();" style="font-size: 18px; font-weight: bold; background: #0B1E7D; color: #fff; padding: 5px; border-radius: 8px; border: 2px solid #888; width: 100%; height: 2em;">Cancel Submission</button>
+            </p>
+            <p>
+                Current position:<br>
+                <b>Lat</b>: <input type="text" id="ICORF_Latitude" name="ICORF_Latitude" /><br>
+                <b>Long</b>: <input type="text" id="ICORF_Longitude" name="ICORF_Longitude" />
+            </p>
+        </div>
+    </form>
+</body>
+</html>
